@@ -39,7 +39,14 @@ jobs:
           aws-region: eu-north-1
 
       - name: Terraform init
-        run: terraform init -reconfigure -backend-config=../../shared/backend/dev.hcl -backend-config="key=02-serverless-gha/dev/terraform.tfstate"
+        run: |
+          terraform init -reconfigure \
+            -backend-config="bucket=${{ secrets.TF_STATE_BUCKET }}" \
+            -backend-config="region=eu-north-1" \
+            -backend-config="key=02-serverless-gha/dev/terraform.tfstate" \
+            -backend-config="encrypt=true" \
+            -backend-config="kms_key_id=${{ secrets.TF_STATE_KMS_KEY_ARN }}" \
+            -backend-config="use_lockfile=true"
 
       - name: Terraform fmt
         run: terraform fmt -check
