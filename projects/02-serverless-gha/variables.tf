@@ -23,3 +23,9 @@ variable "repo" {
   description = "GitHub repo in the form owner/repo"
   default     = "necatihan/aws-devops-terraform-portfolio"
 }
+
+variable "lambda_reserved_concurrency" {
+  type        = number
+  description = "Optional reserved concurrency for the Lambda. Leave null if account concurrency is low."
+  default     = null
+}

@@ -1,6 +1,12 @@
 resource "aws_apigatewayv2_api" "http" {
   name          = "${var.project}-${var.env}-http-api"
   protocol_type = "HTTP"
+
+  cors_configuration {
+    allow_origins = ["*"]
+    allow_methods = ["GET", "POST", "OPTIONS"]
+    allow_headers = ["content-type"]
+  }
 }
 
 resource "aws_apigatewayv2_integration" "lambda" {
@@ -22,4 +28,16 @@ resource "aws_lambda_permission" "allow_apigw" {
   function_name = aws_lambda_function.api.function_name
   principal     = "apigateway.amazonaws.com"
   source_arn    = "${aws_apigatewayv2_api.http.execution_arn}/*/*"
+}
+
+resource "aws_apigatewayv2_route" "items_post" {
+  api_id    = aws_apigatewayv2_api.http.id
+  route_key = "POST /items"
+  target    = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+}
+
+resource "aws_apigatewayv2_route" "items_get_by_pk" {
+  api_id    = aws_apigatewayv2_api.http.id
+  route_key = "GET /items/{pk}"
+  target    = "integrations/${aws_apigatewayv2_integration.lambda.id}"
 }
