@@ -33,6 +33,10 @@ resource "aws_lambda_function" "api" {
   handler       = "handler.handler"
   runtime       = "python3.12"
 
+  tracing_config {
+    mode = "Active"
+  }
+
   filename         = data.archive_file.lambda_zip.output_path
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
 
