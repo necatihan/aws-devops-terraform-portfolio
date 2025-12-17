@@ -49,3 +49,7 @@ terraform.rc
 
 shared/backend/*.hcl
 !shared/backend/*.example.hcl
+
+projects/**/.build/
+projects/**/.terraform/
+projects/**/.terraform.lock.hcl
