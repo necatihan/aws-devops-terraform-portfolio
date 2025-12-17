@@ -28,10 +28,11 @@ resource "aws_cloudwatch_log_group" "lambda" {
 }
 
 resource "aws_lambda_function" "api" {
-  function_name = "${var.project}-${var.env}-api"
-  role          = aws_iam_role.lambda.arn
-  handler       = "handler.handler"
-  runtime       = "python3.12"
+  function_name                  = "${var.project}-${var.env}-api"
+  role                           = aws_iam_role.lambda.arn
+  handler                        = "handler.handler"
+  runtime                        = "python3.12"
+  reserved_concurrent_executions = var.lambda_reserved_concurrency
 
   tracing_config {
     mode = "Active"

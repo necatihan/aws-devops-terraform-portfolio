@@ -7,6 +7,9 @@ resource "aws_cloudwatch_metric_alarm" "lambda_errors" {
   period              = 60
   statistic           = "Sum"
   threshold           = 0
+  alarm_actions       = [aws_sns_topic.serverless_alarms.arn]
+  ok_actions          = [aws_sns_topic.serverless_alarms.arn]
+
 
   dimensions = {
     FunctionName = aws_lambda_function.api.function_name
@@ -22,6 +25,9 @@ resource "aws_cloudwatch_metric_alarm" "lambda_throttles" {
   period              = 60
   statistic           = "Sum"
   threshold           = 0
+  alarm_actions       = [aws_sns_topic.serverless_alarms.arn]
+  ok_actions          = [aws_sns_topic.serverless_alarms.arn]
+
 
   dimensions = {
     FunctionName = aws_lambda_function.api.function_name
@@ -37,6 +43,9 @@ resource "aws_cloudwatch_metric_alarm" "api_5xx" {
   period              = 60
   statistic           = "Sum"
   threshold           = 0
+  alarm_actions       = [aws_sns_topic.serverless_alarms.arn]
+  ok_actions          = [aws_sns_topic.serverless_alarms.arn]
+
 
   dimensions = {
     ApiId = aws_apigatewayv2_api.http.id
