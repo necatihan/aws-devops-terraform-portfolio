@@ -34,8 +34,9 @@ data "aws_iam_policy_document" "gha_assume_role" {
       test     = "StringLike"
       variable = "token.actions.githubusercontent.com:sub"
       values = [
+        "repo:${var.repo}:pull_request",
         "repo:${var.repo}:ref:refs/heads/main",
-        "repo:${var.repo}:pull_request"
+        "repo:${var.repo}:environment:${var.env}"
       ]
     }
   }
