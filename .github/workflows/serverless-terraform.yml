@@ -46,7 +46,6 @@ jobs:
             -backend-config="key=02-serverless-gha/dev/terraform.tfstate" \
             -backend-config="encrypt=true" \
             -backend-config="kms_key_id=${{ secrets.TF_STATE_KMS_KEY_ARN }}" \
-            -backend-config="use_lockfile=true"
 
       - name: Terraform fmt
         run: terraform fmt -check
