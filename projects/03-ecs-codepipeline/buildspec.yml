@@ -1,0 +1,32 @@
+version: 0.2
+
+env:
+  variables:
+    IMAGE_REPO_NAME: "aws-devops-terraform-portfolio-dev-ecs-web"
+
+phases:
+  pre_build:
+    commands:
+      - echo "Logging into ECR..."
+      - aws --version
+      - ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+      - REGION=${AWS_DEFAULT_REGION}
+      - REPO_URI=${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/${IMAGE_REPO_NAME}
+      - COMMIT_SHA=${CODEBUILD_RESOLVED_SOURCE_VERSION}
+      - SHORT_SHA=$(echo ${COMMIT_SHA} | cut -c 1-7)
+      - aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com
+  build:
+    commands:
+      - echo "Build image..."
+      - docker build -t ${REPO_URI}:${SHORT_SHA} projects/03-ecs-codepipeline/app
+      - docker tag ${REPO_URI}:${SHORT_SHA} ${REPO_URI}:latest
+  post_build:
+    commands:
+      - echo "Push image..."
+      - docker push ${REPO_URI}:${SHORT_SHA}
+      - docker push ${REPO_URI}:latest
+      - printf '[{"name":"app","imageUri":"%s"}]' ${REPO_URI}:${SHORT_SHA} > imagedefinitions.json
+
+artifacts:
+  files:
+    - imagedefinitions.json
