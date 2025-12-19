@@ -39,3 +39,9 @@ variable "cluster_version" {
   description = "EKS Kubernetes version"
   default     = "1.29"
 }
+
+variable "cluster_endpoint_public_access_cidrs" {
+  type        = list(string)
+  description = "Allowed CIDRs to access the EKS public endpoint"
+  default     = ["0.0.0.0/0"]
+}
