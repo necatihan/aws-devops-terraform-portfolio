@@ -9,8 +9,7 @@ This project demonstrates an end-to-end **AWS-native CI/CD pipeline** that build
 - Container registry: **ECR**
 - CI/CD: **CodePipeline + CodeBuild**
 - GitHub integration: **CodeStar Connection**
-- Observability: **CloudWatch Logs** (and ECS/ALB health checks)
-- Security-minded defaults: private-by-default S3, least privilege IAM, encrypted artifact bucket, etc.
+- Observability: **CloudWatch Logs**, ECS service events, ALB health checks
 
 ---
 
@@ -31,6 +30,6 @@ flowchart LR
   CP -->|Source| CS[CodeStar Connection]
   CP -->|Build| CB[CodeBuild]
   CB -->|docker build/push| ECR[(ECR Repository)]
-  CP -->|Deploy using imagedefinitions.json| ECS[ECS Service (Fargate)]
+  CP -->|Deploy using imagedefinitions.json| ECS[ECS Service - Fargate]
   ECS --> ALB[Application Load Balancer]
   ALB --> User[Browser / curl]
